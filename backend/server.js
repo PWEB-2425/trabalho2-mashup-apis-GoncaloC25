@@ -118,7 +118,7 @@ app.get('/ai/:question', async (req, res) => {
     var question = req.params.question;
     question = decodeURIComponent(question);
     
-    const prompt = "O utilizador perguntou: \"" + question + ". Responda de forma clara e objetiva e super bem resumida.";
+    const prompt = "O utilizador perguntou: \"" + question + ". Responda de forma clara e objetiva e super bem resumida. Remove toda a estelização markdown";
 
     const response = await ai.models.generateContent({
       model: "gemini-2.5-flash",

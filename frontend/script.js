@@ -62,6 +62,8 @@ async function chatWithAI() {
     const chatLog = document.getElementById('chat-messages');
     var question = document.getElementById('chat-input').value;
 
+    document.getElementById('chat-input').value = ""; // Limpa o campo de entrada após enviar a pergunta
+
 
     if (!question) {
         alert("Por favor, insira uma pergunta.");
@@ -69,8 +71,14 @@ async function chatWithAI() {
     }
 
     const usermessage = document.createElement('p'); // Cria um novo parágrafo
-    usermessage.textContent = "Você: " + question; // Define o texto da mensagem
+    const username = document.createElement('p'); // Obtém o nome de usuário
+    usermessage.setAttribute('class', 'user message'); // Define a classe para estilização
+    usermessage.textContent = question; // Define o texto da mensagem
+    username.textContent = "Eu"; // Define o texto do nome de usuário
+    username.setAttribute('class', 'user name'); // Define a classe para estilização
+    chatLog.appendChild(username); // Adiciona o nome de usuário ao chat
     chatLog.appendChild(usermessage); // Adiciona a mensagem do usuário ao chat
+    chatLog.scrollTop = chatLog.scrollHeight;
 
     question += `\" sobre: "${document.getElementById('search-idea').value}"`;
     const resposta = await fetch(`${baseserverurl}/ai/` + encodeURIComponent(question));
@@ -80,8 +88,14 @@ async function chatWithAI() {
         console.log(info);
 
         const newMessage = document.createElement('p'); // Cria um novo parágrafo
-        newMessage.textContent = "IdeaAdvisor: " + info.answer; // Define o texto da resposta
+        newMessage.textContent = info.answer; // Define o texto da resposta
+        newMessage.setAttribute('class', 'ai message'); // Define a classe para estilização
+        const aiName = document.createElement('p'); // Cria um novo parágrafo para o nome da IA
+        aiName.textContent = "IdeaAdvisor"; // Define o texto do nome da IA
+        aiName.setAttribute('class', 'ai name'); // Define a classe para estilização
+        chatLog.appendChild(aiName); // Adiciona o nome da IA ao chat
         chatLog.appendChild(newMessage); // Adiciona a resposta ao chat
+        chatLog.scrollTop = chatLog.scrollHeight;
     } else {
         // Caso haja erro, mostra mensagem de erro
         chatLog.innerText = "Erro ao obter resposta da IA.";

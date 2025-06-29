@@ -1,73 +1,100 @@
-[![Review Assignment Due Date](https://classroom.github.com/assets/deadline-readme-button-22041afd0340ce965d47ae6ef1cefeee28c7c493a6346c4f15d667ab976d596c.svg)](https://classroom.github.com/a/psUndoci)
-# Trabalho #2 API MASHUP
+# IdeaVision - Pesquisa de ideias (Trabalho 2)
 
-**Data de Entrega:** 26 de junho de 2025
+Projeto desenvolvido por Gonçalo Duque Correia, n. 29435
+
+## Descrição
+
+Esta aplicação permite:
+
+- A pesquisa de “ideias” por termos de pesquisa
+- Apresentação de imagens tendo em conta o termo pesquisado, utilizando a API externa [pixabay.com](https://pixabay.com/pt/)
+- Apos a apresentação das imagens relacionadas, o utilizador poderá fazer perguntas sobre a “ideia” a uma IA, utilizando a API do Google Gemini
+
+## Pré-requisitos
+
+- [Node.js](https://nodejs.org/) (v18 ou superior recomendado)
+- [MongoDB](https://www.mongodb.com/) (local ou Atlas)
+- npm (geralmente já vem com o Node.js)
+- Conta [Google](https://myaccount.google.com)
+- Conta [Pixabay](https://pixabay.com/accounts/login/)
+
+## Instalação
+
+1. **Clone o repositório:**
+
+   ```sh
+   git clone <url-do-repo>
+   cd backend
+   ```
+
+2. **Instale as dependências:**
+
+   ```sh
+   npm install
+   ```
+
+3. **Configure as variáveis de ambiente:**
+
+   - Crie um ficheiro `.env` no diretório /backend/ do projeto com o seguinte conteúdo:
+   ```
+   SECRET=sua_chave_secreta
+   MONGO_URI=string_conexao_mongodb
+   PORT=3001
+   API_KEY_PIX=chave_api_pixabay
+   API_KEY_GEMINI=chave_api_gemini
+   ```
+
+   * Ajuste os valores conforme necessário.
+   - Poderá obter a string de conexão do MongoDB na sua dashboard do Atlas
+   - Poderá obter uma chave de API do Pixabay em [pixabay.com/api/docs](https://pixabay.com/api/docs/) 
+   - Poderá obter uma chave de API do Google Gemini em [aistudio.google.com](https://aistudio.google.com)
+
+4. **Certifique-se que o MongoDB está a correr.**
+
+   - Configure a string de conexão para Atlas no `.env`
+   - ou se estiver a correr localmente `mongod`
+
+## Como correr o projeto
+
+diretamente invocando o node.js
+
+```sh
+node server.js
+
+Ou via npm
+
+```sh
+npm start
+
+```
+
+A aplicação ficará disponível em [http://localhost:3001](http://localhost:3001) (ou na porta definida no `.env`).
+
+## Estrutura de pastas
+```
+Trabalho2/
+├── frontend/
+│   ├── login.html
+│   ├── script.js
+│   ├── estilo.css
+│   └── index.html
+├── backend/
+│   ├── server.js
+│   ├── package.json
+│   ├── package-lock.json
+│   ├── .env
+└── README.md
+```
+
+## Fluxo de utilização
+
+1. Insira uma ideia na caixa de texto no topo da página 
+2. A seguir, faça quantas perguntas sejam necessárias ao chatbot.
+
+## Notas para desenvolvimento
+
+- O código está comentado para facilitar a compreensão.
+- Pode adicionar novas funcionalidades, como registo de utilizadores, hashing de passwords, etc.
+- Para qualquer dúvida, consulte os comentários no código fonte.
 
 ---
-
-## 1. Objetivo
-
-Desenvolver uma aplicação web que:
-
-- Consuma e integre dados de pelo menos 2 APIs externas, com o **servidor** a efetuar todas as requisições (server-side).
-- Inclua um sistema de autenticação de utilizadores baseado em **Express Sessions** ou **Passport-local**.
-- Utilize base de dados **MongoDB** para armazenar informação dos utilizadores (por exemplo histórico de pesquisas)
-
-## 2. Funcionalidades
-
-1. **Autenticação (Server)**
-   - Registo de utilizador (username + password)
-   - Início de sessão com sessões Express ou Passport-local
-   - Proteção de rotas para apenas utilizadores autenticados
-2. **Mashup de APIs**
-   - O utilizador, após login, introduz um termo de pesquisa (e.g., nome de cidade, artista, palavra)
-   - O servidor consome até duas APIs REST externas e retorna dados integrados ao cliente
-   - **Exemplos de APIs**:
-     - **OpenWeatherMap**: clima da cidade (`/weather?q={city}`)
-     - **RestCountries**: informações do país (`/alpha/{code}`)
-     - **Wikipedia REST API**: resumo de artigos (`/page/summary/{title}`)
-     - **Pixabay** ou **Unsplash**: imagens livres de royalties
-     - **NewsAPI** ou **GNews API**: notícias relacionadas
-     - **TMDB API**: informação e posters de filmes
-3. **Persistência em MongoDB**
-   - Guardar credenciais (idealmente hash das passwords)
-   - Histórico de pesquisas por utilizador
-
-## 3. Tecnologias
-
-- **Frontend**: HTML, CSS (ou Tailwind/Bootstrap), JavaScript
-- **Backend**: Node.js (v12+), Express
-  - Autenticação: **express-session** ou **passport-local**
-  - Chamadas a APIs feitas no servidor com ftech API (alternativamente com **Axios**, ou **node-fetch** em versoes mais antigas) usando **async/await**
-- **Base de Dados**: MongoDB (Atlas ou local)
-
-## 4. APIs Externas (sugeridas)
-
-- **OpenWeatherMap** (clima e geocoding)
-- **RestCountries** (bandeiras, capitais, moedas)
-- **Wikipedia REST API** (enciclopédia)
-- **Pixabay** / **Unsplash** (imagens)
-- **NewsAPI** / **GNews API** (notícias)
-- **Exchange Rates API** (câmbio de moedas)
-- **DictionaryAPI** (definições, sinónimos)
-- **TMDB API** (filmes, trailers)
-
-> **Nota:** Registem-se nas plataformas e obtenham as chaves necessárias. Todas as requisições a estas APIs devem ser feitas pelo servidor, protegendo as suas credenciais. As API Keys não devem ficar expostas no código.
-
-## 5. Regras & Avaliação
-
-1. **Grupos:** 2 elementos por grupo.
-2. **GitHubClassroom:** Repositório privado com acesso ao utilizador `pedromoreira-estg`.
-3. **Build & Install:** Incluir script para instalar dependências e iniciar a aplicação.
-4. **Documentação (`README.md`):** Incluir:
-   - Identificação dos elementos do grupo
-   - Tecnologias e APIs utilizadas
-   - Instruções de instalação e configuração das chaves e do MongoDB
-   - Comandos para executar localmente
-   - Link de deployment (**render.com** ou equivalente)
-5. **Deployment:** Aplicação operacional online (ex.: render.com).
-6. **Entrega em Moodle:** Cópia do `README.md` e `.zip`e **link** do repositório.
-
----
-
-Boa sorte!
