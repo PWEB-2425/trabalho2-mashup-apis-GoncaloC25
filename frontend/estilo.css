@@ -1,0 +1,113 @@
+/*
+Color pallete:
+- Background: #252424
+- Primary: #f0f2f2 
+- Secondary 1: #c4aea0
+- Secondary 2: #c64e41
+*/
+
+body {
+  background-color: #252424;
+  color: #f0f2f2;
+  font-family: Coolvetica, sans-serif;
+  animation: fadeIn 2s ease 0s 1 normal forwards;
+}
+
+.image-carousel {
+    margin-top: 20px;
+    margin-bottom: 20px;
+    overflow: hidden;
+    position: relative;
+    height: 340px;
+
+    border: #c64e41 solid 3px;
+    border-radius: 12px;
+    -webkit-box-shadow:0px 0px 57px 0px rgba(198,79,65,0.8);
+    -moz-box-shadow: 0px 0px 57px 0px rgba(198,79,65,0.8);
+    box-shadow: 0px 0px 57px 0px rgba(198,79,65,0.8);
+}
+
+.carousel-track {
+    display: flex;
+    position: absolute;
+    white-space: nowrap;
+    animation: scroll 30s linear infinite;
+}
+
+.carousel-track.top-row {
+    top: 0;
+}
+
+.carousel-track.bottom-row {
+    top: 170px;
+    animation-direction: reverse;
+}
+
+.carousel-track:hover {
+    animation-play-state: paused;
+}
+
+.btn {
+  padding: 10px 15px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-family: Coolvetica, sans-serif;
+  background-color: #c4aea0;
+  margin: 3px;
+}
+
+.btn:hover {
+  font-family: Coolvetica, sans-serif;
+  background-color: #95867b;
+}
+
+.textIn {
+  padding: 10px;
+  margin-right: 10px;
+  border: 2px solid #c4aea0; /* Secondary 1 */
+  border-radius: 5px;
+  background-color: #383737; /* Slightly lighter than background */
+  color: #f0f2f2; /* Primary text color */
+  font-family: Coolvetica, sans-serif;
+}
+
+.chatbot {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    width: 97%;
+    height: 230px;
+    border: rgb(42, 160, 228) solid 3px;
+    border-radius: 12px;
+    -webkit-box-shadow:0px 0px 57px 0px rgba(42, 160, 228,0.4);
+    -moz-box-shadow: 0px 0px 57px 0px rgba(42, 160, 228,0.4);
+    box-shadow: 0px 0px 57px 0px rgba(42, 160, 228,0.4);
+}
+.chat-input{
+    margin: 20px;
+    width: 100%;
+    position: absolute;
+    bottom: 0;
+}
+
+.chat-input .chat{
+    flex: 1; /* Each button takes equal space */
+    margin: 0 3px; /* Optional: adds small spacing between buttons */
+    padding: 10px; /* Optional: adds padding inside buttons */
+}
+
+.textIn.chat{
+    width: 89%;
+}
+
+@keyframes scroll {
+    0% { transform: translateX(0); }
+    100% { transform: translateX(-50%); }
+}
+
+.carousel-track img {
+    height: 180px;
+    margin: 0 10px;
+    object-fit: cover;
+}
