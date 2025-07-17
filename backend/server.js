@@ -33,8 +33,8 @@ app.use(session({
   resave: false,
   saveUninitialized: false,
   cookie: {
-    secure: false, // set to true if using HTTPS
-    sameSite: 'lax',
+    secure: true, // set to true if using HTTPS
+    sameSite: 'none',
     httpOnly: true, // prevents client-side JS from reading the cookie
     maxAge: 1 * 60 * 60 * 1000 // 1 hour
   }
