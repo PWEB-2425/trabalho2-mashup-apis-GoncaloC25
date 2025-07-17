@@ -5,84 +5,136 @@ const { MongoClient } = require('mongodb');
 const dotenv = require('dotenv').config();
 const cors = require('cors');
 const { GoogleGenAI } = require('@google/genai');
+const bcrypt = require('bcrypt');
 
 const ai = new GoogleGenAI({ apiKey: process.env.API_KEY_GEMINI });
+
+const baseserverurl = process.env.BASE_SERVER_URL || "http://localhost:5500";
+
+
 
 // Cria uma instância do Express
 const app = express();
 
 // Permite receber dados de formulários via POST
 app.use(express.urlencoded({ extended: true }));
-// Configura sessões para autenticação
-app.use(session({ secret: process.env.SECRET || "12345" }));
 // Permite receber dados em JSON
 app.use(express.json());
 // Permite requisições de outros domínios (CORS)
-app.use(cors())
+app.use(cors({
+  origin: baseserverurl,
+  credentials: true
+}));
 
-
-// Rota pública de exemplo
-app.get('/about', (req, res) => {
-    res.send('Sobre nós');
-});
-
-// proteger a pagina estatica '/pesquisa.html'
-// tem que ser feito antes de configurar o servidor estatico
-
-app.use('/pesquisa.html', estaAutenticado,(req, res, next) => {
-    if (req.session.username) {
-        next();
-    } else {
-        res.redirect('/frontend/login.html');
-    }
-});
-
-// Configura servidor para servir arquivos estáticos da pasta 'public'
-app.use(express.static('public'));
-
+// Session configuration - make sure it's secure in production
+app.use(session({
+  name: 'sid',
+  secret: process.env.SECRET,
+  resave: false,
+  saveUninitialized: false,
+  cookie: {
+    secure: false, // set to true if using HTTPS
+    sameSite: 'lax',
+    httpOnly: true, // prevents client-side JS from reading the cookie
+    maxAge: 1 * 60 * 60 * 1000 // 1 hour
+  }
+}));
 
 // Rota de login: autentica username e cria sessão
 app.post('/login', async (req, res) => {
+    const collection = db.collection('users');
+    const username = req.body.username;
+    const password = req.body.password;
+    
+    // Procura username na base de dados
+    const userdb = await collection.findOne({ username: username });
+
+    if(!userdb){
+        return res.status(401).json({
+            message: "Utilizador inexistente"
+        })
+    }
+
+    bcrypt.compare(password, userdb.password, async function (err, isMatch) {
+        if (isMatch) {
+            // username autenticado com sucesso
+            console.log(`Utilizador ${username} autenticado com sucesso.`);
+            req.session.username = username;
+                
+            return res.json({
+                success: true
+            });
+
+        } else {  
+            // Falha na autenticação
+            console.log(`Falha na autenticação para o usuário ${username}.`);
+            return res.status(401).json({
+                message: 'Palavra-passe incorreta'
+            })
+        }
+    });
+});
+
+app.use('/register', async (req, res) => {
+    const collection = db.collection('users');
+
     const username = req.body.username;
     const password = req.body.password;
 
-    // Procura username na base de dados
-    userdb = await collection.findOne({ username: username, password: password });
-    if (userdb) {
-        // username autenticado com sucesso
-        console.log(`Utilizador ${username} autenticado com sucesso.`);
-        req.session.username = username;
-        return res.redirect('/segredo');    
-    } else {  
-        // Falha na autenticação
-        console.log(`Falha na autenticação para o usuário ${username}.`);
-        return res.redirect('/frontend/login.html');
-    }
+    bcrypt.genSalt(8 /*8 rondas de salting*/ , (err, salt) => {
+        if (err) {
+            return res.status(500).json({
+                message: 'Erro ao fazer salt'
+            })
+        }
+
+        bcrypt.hash(password, salt, (err, hash) => {
+            if (err) {
+                return res.status(500).json({
+                    message: "Erro ao gerar palavra-passe encriptada"
+                })
+            }
+
+            collection.insertOne({
+                username: username,
+                password: hash
+            })
+
+            return res.json({
+                message: 'Utilizador criado com sucesso! É ncessário fazer iniciar-sessão'
+            })
+        });
+    });
 });
 
 // Middleware para proteger rotas: verifica se username está autenticado
 function estaAutenticado(req, res, next) {
     if (req.session.username) {
+        console.log("Utilizador autenticado");
         next();
     } else {
-        res.status(401).redirect('/frontend/login.html');
+        console.log("Utilizador não autenticado");
+        res.status(401).json({
+            message: 'Utilizador não autenticado. Por favor, inicie sessão'
+        })
     }
 }
-
-// Rota protegida: só acessível se autenticado
-app.get('/segredo', estaAutenticado, (req, res) => {
-    // Adiciona link para a página de pesquisa
-    res.send(`
-        <h1>Bem-vindo ao segredo, ${req.session.username}!</h1>
-        <p><a href="/pesquisa.html">Ir para pesquisa de país</a></p>
-        <p><a href="/logout">Logout</a></p>
-    `);
-});
 
 // Rota de logout: destroi a sessão autenticada
 app.get('/logout', (req, res) => {
     req.session.destroy();
-    res.redirect('/login.html');
+    console.log("Sessão destruida")
+    return res.json({
+        success: true
+    });
+});
+
+app.get('/profile', estaAutenticado, (req, res) => {
+    const username = req.session.username
+    console.log(`Utilizador autenticado: ${username}`)
+    res.json({
+        name: username
+    })
 });
 
 // Rota autenticada para buscar imagens de um termo de pesquisa usando API externa

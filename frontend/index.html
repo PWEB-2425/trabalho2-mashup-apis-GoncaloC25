@@ -4,6 +4,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="stylesheet" href="estilo.css" />
+    <link rel="icon" href="src/message-circle-image-svgrepo-com.svg">
     <script src="script.js" defer></script>
     <title>IdeiaVision</title>
   </head>
@@ -11,29 +12,43 @@
     <div class="container">
       <div class="sidebar">
         <!-- Menu com histórico e configurações -->
-        <div class="search-history">
-          <h3>Histórico</h3>
+        <h3>Histórico</h3>
+        <div class="history-list">
           <ul id="history-list"></ul>
+        </div>
+        <div class="usergreet">
+          <svg width="30px" height="30px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <path d="M16 7C16 9.20914 14.2091 11 12 11C9.79086 11 8 9.20914 8 7C8 4.79086 9.79086 3 12 3C14.2091 3 16 4.79086 16 7Z" stroke="#f0f2f2" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path> <path d="M12 14C8.13401 14 5 17.134 5 21H19C19 17.134 15.866 14 12 14Z" stroke="#f0f2f2" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path> </g></svg>
+          <div class="usergreeting">
+            <p class="greeting">Bem-vindo,</p>
+            <p id="username">placeholder</p>
+          </div>
+          <button class="invisible logout" id = "logoutBtn">
+            <svg width="30px" height="30px" viewBox="0 0 24.00 24.00" fill="none" xmlns="http://www.w3.org/2000/svg" stroke="#000000" transform="rotate(0)matrix(1, 0, 0, 1, 0, 0)">
+              <g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <path d="M16.9995 15.9995L20.9995 11.9995M20.9995 11.9995L16.9995 7.99951M20.9995 11.9995H8.99951M12.9995 20.9995H6.20029C5.08019 20.9995 4.52014 20.9995 4.09231 20.7815C3.71599 20.5898 3.41003 20.2838 3.21828 19.9075C3.00029 19.4797 3.00029 18.9196 3.00029 17.7995V6.19951C3.00029 5.07941 3.00029 4.51935 3.21828 4.09153C3.41003 3.71521 3.71599 3.40925 4.09231 3.2175C4.52014 2.99951 5.08019 2.99951 6.20029 2.99951L12.9995 2.99951" stroke="#f0f2f2" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path> </g>
+            </svg>
+          </button>
         </div>
       </div>
 
       <div class="main-content">
-        <div class="search-box">
+        <div class="search-box middle">
           <input
             type="text"
             id="search-idea"
             placeholder="Qual a sua ideia..."
-            class="textIn"
+            class="textIn idea"
           />
-          <button class="btn" id="search-btn">Pesquisar</button>
+          <button class="invisible" id="search-btn">
+            <svg width="36px" height="36px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <path d="M3.00463 21L16 8L21.0023 12.1701M3.00463 21C3.00463 21 9.9675 21 12.0039 21C16.9176 21 20.9117 17.0622 21.0023 12.1701M3.00463 21C3.00463 21 4.56382 17.2561 3.93982 16.0008C3.34076 14.7956 3.00391 13.4372 3.00391 12C3.00391 7.02944 7.03334 3 12.0039 3C16.9745 3 21.0039 7.02944 21.0039 12C21.0039 12.0568 21.0034 12.1135 21.0023 12.1701M11 13.0018L7.5 10L3.26826 14.1741" stroke="#c4aea0" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path> </g></svg>
+          </button>
         </div>
 
-        <div class="image-carousel" id="image-carousel" hidden="">
+        <div class="image-carousel" id="image-carousel" hidden>
           <div class="carousel-track top-row" id="images-top"></div>
           <div class="carousel-track bottom-row" id="images-bottom"></div>
         </div>
 
-        <div class="chatbot" id="chatbot" hidden="">
+        <div class="chatbot" id="chatbot" hidden>
           <div class="chat-messages" id="chat-messages"></div>
           <div class="chat-input">
             <input

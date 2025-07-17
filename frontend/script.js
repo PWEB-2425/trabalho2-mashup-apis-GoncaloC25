@@ -7,19 +7,39 @@ const imagesGeral = document.getElementById('image-carousel');
 
 const chatGeral = document.getElementById('chatbot');
 
+const logoutBtn = document.getElementById('logoutBtn');
+
+logoutBtn.addEventListener('click', logout);
+
 const baseserverurl = "http://localhost:3001"
 
 searchBtn.addEventListener('click', showImages);
 chatBtn.addEventListener('click', chatWithAI);
 
-// Este script é responsável por lidar com a pesquisa de países
+getUser()
+
+async function getUser(){
+    const resposta = await fetch(`${baseserverurl}/profile`, {credentials: "include"});
+
+    if (resposta.status === 401){
+        window.location.href = 'login.html'
+    } else {
+        const data = await resposta.json();
+
+        console.log(data)
+        document.getElementById('username').innerHTML = data.name;
+    }
+}
+
+// Este script é responsável por lidar com a pesquisa de ideias
 // Ativa o evento de envio do formulário
 async function showImages () {
-    imagesGeral.hidden = false; // Mostra o carrossel de imagens
-    chatGeral.hidden = false; // Mostra o chatbot
+    imagesGeral.hidden = false; // Mostra o carrossel de imagens~
+    chatGeral.hidden = false;
 
     // Obtém o valor no campo do país
     const ideia = document.getElementById('search-idea').value;
+
     if (!ideia) {
         imagesTop.innerText = "Por favor, insira uma ideia.";
         return;
@@ -27,6 +47,10 @@ async function showImages () {
 
     // Faz uma requisição para a rota /pesquisa/:pais do servidor
    const resposta = await fetch(`${baseserverurl}/pesquisa/` + encodeURIComponent(ideia));
+
+   if(resposta.status === 401){
+        window.location.href = 'login.html';
+    }
 
     // Se a resposta for bem-sucedida (status 200)
     if (resposta.ok) {
@@ -54,7 +78,7 @@ async function showImages () {
 
     } else {
         // Caso haja erro ou país não encontrado, mostra mensagem de erro
-        imagesContainer.innerText = "Ideia não encontrada ou erro na pesquisa.";
+        imagesTop.innerText = "Ideia não encontrada ou erro na pesquisa.";
     }
 }
 
@@ -99,5 +123,13 @@ async function chatWithAI() {
     } else {
         // Caso haja erro, mostra mensagem de erro
         chatLog.innerText = "Erro ao obter resposta da IA.";
+    }
+}
+
+async function logout(){
+    const response = await fetch(baseserverurl + '/logout', {credentials: "include"});
+
+    if (response.ok){
+        window.location.href = 'login.html';
     }
 }
