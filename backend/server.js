@@ -9,7 +9,7 @@ const bcrypt = require('bcrypt');
 
 const ai = new GoogleGenAI({ apiKey: process.env.API_KEY_GEMINI });
 
-const baseserverurl = process.env.BASE_SERVER_URL || "http://localhost:5500";
+const baseserverurl = process.env.BASE_SERVER_URL;
 
 
 
@@ -198,6 +198,7 @@ async function start() {
         console.log('Ligado ao MongoDB');
         db = client.db(process.env.DB_NAME); // Seleciona a base de dados DB_NAME do .env
         collection = db.collection('users'); // Seleciona a coleção 'users'
+        console.log("A ouvir do site: " + baseserverurl);
         // Inicia o servidor Express na porta definida no .env ou 3001
         return app.listen(process.env.PORT || 3001, () => {
             const port = process.env.PORT || 3001;
