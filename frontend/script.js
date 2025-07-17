@@ -11,7 +11,7 @@ const logoutBtn = document.getElementById('logoutBtn');
 
 logoutBtn.addEventListener('click', logout);
 
-const baseserverurl = "http://localhost:3001"
+const baseserverurl = "https://trab2-pw.onrender.com"
 
 searchBtn.addEventListener('click', showImages);
 chatBtn.addEventListener('click', chatWithAI);
