@@ -16,6 +16,8 @@ const baseserverurl = process.env.BASE_SERVER_URL;
 // Cria uma instância do Express
 const app = express();
 
+app.set('trust proxy', 1);
+
 // Permite receber dados de formulários via POST
 app.use(express.urlencoded({ extended: true }));
 // Permite receber dados em JSON
